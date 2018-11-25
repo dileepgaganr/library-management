@@ -1,0 +1,99 @@
+<mat-accordion hideToggle="false" [multi]="true" fxLayout="column" fxLayoutAlign="space-around stretch">
+  <mat-expansion-panel [expanded]="true">
+    <mat-expansion-panel-header>
+      Books
+    </mat-expansion-panel-header>
+    <!-- <div > -->
+    <div fxLayout="column" fxLayoutGap="2%">
+      <form [formGroup]="bookForm" (ngSubmit)="saveBook()" novalidate fxLayout="column" fxLayoutGap="2%" #form="ngForm">
+        <mat-form-field fxFlex="10" fxFlexAlign="start">
+          <input matInput placeholder="Search by ISBN" (input)="getBookResult($event.target.value)" formControlName="isbn" required>
+        </mat-form-field>
+        {{message}}
+
+        <div fxLayout="row" fxLayout.md="column" fxLayout.xs="column" fxLayout.sm="column" fxFlex="80" fxLayoutGap="2%">
+          <div fxLayout="column" fxFlex="35">
+            <mat-form-field>
+              <input matInput placeholder="Book Title" formControlName="title" required>
+            </mat-form-field>
+            <mat-form-field>
+              <input matInput placeholder="Book Description" formControlName="desciption" required>
+            </mat-form-field>
+            <mat-form-field>
+              <input matInput placeholder="Book Stock" type="number" formControlName="stock" required>
+            </mat-form-field>
+          </div>
+
+          <!-- <mat-divider [vertical]="true"></mat-divider> -->
+
+          <div fxLayout="column" fxFlex="35">
+            <mat-form-field>
+              <input matInput placeholder="Book Author" formControlName="author" required>
+            </mat-form-field>
+            <mat-form-field>
+              <mat-select placeholder="Book Category" formControlName="category" required>
+                <mat-option *ngFor="let cat of categories" [value]="cat.name">
+                  {{cat.name}}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+
+            <mat-form-field>
+              <input matInput placeholder="Book Image Url" formControlName="image" required>
+            </mat-form-field>
+          </div>
+
+          <div fxLayout="column" fxFlex="10">
+            <img [src]="">
+          </div>
+
+          <div fxLayout="column" fxFlex="10">
+            <div fxLayout="row" fxLayoutAlign="end end" fxLayoutGap="10px" fxflex="20" fxFill>
+              <button mat-raised-button type="button" (click)="resetForm()">Clear</button>
+              <button mat-raised-button color="primary" [disabled]="bookForm.invalid">Save</button>
+            </div>
+          </div>
+
+        </div>
+
+      </form>
+    </div>
+  </mat-expansion-panel>
+  <div fxLayout="column">
+    <mat-expansion-panel [expanded]="true" [hideToggle]="true">
+      <mat-expansion-panel-header>
+        <b>Available Books</b>
+      </mat-expansion-panel-header>
+      <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
+      <table mat-table *ngIf="dataSource" [dataSource]="dataSource" style="width:100%">
+
+        <ng-container [matColumnDef]="item.name" *ngFor="let item of displayedColumns" [ngSwitch]="item.type">
+          <ng-container *ngSwitchCase="undefined">
+            <th mat-header-celll *matHeaderCellDef> {{item.title}} </th>
+            <td mat-cell *matCellDef="let row" style="padding: 0px 12px"> {{ row[item.name] }} </td>
+          </ng-container>
+
+          <ng-container *ngSwitchCase="'edit'">
+            <th mat-header-celll *matHeaderCellDef style="text-align:left"> {{item.title}} </th>
+            <td mat-cell *matCellDef="let row" id="{{item.name}}" [class.numericContent]="item.align === ''">
+              <mat-icon (click)="editRow(row)" style=" cursor: pointer;">edit</mat-icon>
+            </td>
+          </ng-container>
+
+          <ng-container *ngSwitchCase="'delete'">
+              <th mat-header-celll *matHeaderCellDef style="text-align:left"> {{item.title}} </th>
+              <td mat-cell *matCellDef="let row" id="{{item.name}}" [class.numericContent]="item.align === ''">
+                <mat-icon (click)="deleteBook(row)" style=" cursor: pointer;">delete</mat-icon>
+              </td>
+            </ng-container>
+
+        </ng-container>
+
+
+        <tr mat-header-row *matHeaderRowDef="columnsList;sticky: true "></tr>
+        <tr mat-row *matRowDef="let row; columns: columnsList;"></tr>
+      </table>
+
+    </mat-expansion-panel>
+  </div>
+</mat-accordion>

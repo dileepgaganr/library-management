@@ -1,0 +1,27 @@
+<mat-toolbar color="primary">
+	<span>Your's Library</span>
+	<mat-nav-list fxLayout="row" *ngIf="userDet">
+		<a mat-list-item [routerLinkActive]="['active']" [routerLink]="['./Dashboard/Books']">Books</a>
+		<a mat-list-item *ngIf="userDet.isAdmin" [routerLinkActive]="['active']" [routerLink]="['./Dashboard/AddBooks']">Add Books</a>
+		<a mat-list-item *ngIf="userDet.isAdmin" [routerLinkActive]="['active']" [routerLink]="['./Dashboard/AddUser']">Add User</a>
+		<a mat-list-item [routerLinkActive]="['active']" [routerLink]="['./Dashboard/AssignedBooks']">View Assigned Books</a>
+	</mat-nav-list>
+	<span style="flex: 1 1 auto;"></span>
+	<span fxLayout="row" fxLayoutAlign="space-between stretch" *ngIf="userDet">
+		<span fxFlex="80">
+			<i class="material-icons">person</i>
+			Welcome {{userDet.userName}}
+		</span>
+		<span fxFlex="20" fxFlexAlign="end end">
+			<button mat-icon-button [matMenuTriggerFor]="menu">
+				<mat-icon>more_vert</mat-icon>
+			</button>
+			<mat-menu #menu="matMenu">
+				<button mat-menu-item (click)="logOut()">
+					<span>LogOut</span>
+				</button>
+			</mat-menu>
+
+		</span>
+	</span>
+</mat-toolbar>

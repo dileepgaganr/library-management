@@ -1,0 +1,15 @@
+
+.mat-card{
+    width: 160% !important;
+}
+
+@media screen and (max-width: 600px) {
+    .login-Container {
+        width: 60%;
+        padding-top: 25%;
+        padding-left: 6%;
+    }
+    .mat-card{
+        width: 120% !important;
+    }
+}

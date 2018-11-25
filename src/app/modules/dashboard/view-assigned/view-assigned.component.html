@@ -1,0 +1,69 @@
+<div fxLayout="column" fxLayoutAlign="space-around stretch" fxLayoutGap="2%">
+  <mat-card fxLayout="row" fxLayout.lt-sm="column" fxFlex="20" fxLayoutGap="10px" *ngIf="isAdmin">
+
+    <span fxFlex="30">
+      <form >
+        <mat-form-field class="example-full-width">
+          <input type="text" placeholder="Select User" aria-label="Number" 
+          matInput [formControl]="myControl" [matAutocomplete]="auto"  >
+          <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn" (optionSelected)='getUserBooks($event.option.value)'>
+            <mat-option *ngFor="let user of filteredUsers | async" [value]="user">
+              {{user.userName}}
+            </mat-option>
+          </mat-autocomplete>
+        </mat-form-field>
+        
+      </form>
+    </span>
+  </mat-card>
+
+  <div fxFlex="80" fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="32px" fxLayoutAlign="flex-start">
+
+    <ng-container *ngFor="let book of filteredBooks">
+
+      <mat-card fxFlex="0 1 calc(20% - 32px)" fxFlex.lt-md="0 1 calc(50% - 32px)" fxFlex.lt-sm="100%">
+        <span fxLayout="column" fxLayoutAlign="center center">
+          <span fxFlex="60">
+            <img [src]="book.image" style="height: 150px;">
+          </span>
+          <span fxFlex="20">
+            <b>Author: </b>
+            <label>{{book.author}}</label>
+          </span>
+          <span fxLayout="row" fxFlex="20">
+            <!-- <span>
+              <button type="button" mat-flat-button color="primary" (click)="viewBookDetails(book)">
+                View Details
+              </button>
+            </span> -->
+            <span>
+              <button mat-icon-button (click)="unAssignBook(book)">
+                <mat-icon >
+                  favorite
+                </mat-icon>
+              </button>
+            </span>
+          </span>
+        </span>
+      </mat-card>
+
+    </ng-container>
+
+  </div>
+
+</div>
+
+<ng-template #feedBack>
+  <span fxLayout="column" fxLayoutAlign="space-around stretch">
+    <span>
+      <mat-form-field>
+        <textarea matInput placeholder="Enter comments" [(ngModel)]="comments">
+        </textarea>
+      </mat-form-field>
+      <bar-rating [(rate)]="rate" [max]="5" [theme]="'stars'" ></bar-rating>
+    </span>
+    <span>
+      <button mat-raised-button color="primary" (click)="submitFeedBack()">Submit</button>
+    </span>
+  </span>
+</ng-template>

@@ -1,0 +1,125 @@
+<div fxLayout="column" fxLayoutAlign="space-around stretch" fxLayoutGap="2%">
+  <mat-card fxLayout="row" fxLayout.lt-sm="column" fxFlex="20" fxLayoutGap="10px">
+
+    <span fxFlex="30">
+      <mat-form-field>
+        <mat-icon matPrefix>search</mat-icon>
+        <input matInput placeholder="Search" [(ngModel)]="searchBy">
+      </mat-form-field>
+    </span>
+    <span fxFlex="30">
+      <mat-form-field>
+        <mat-icon matPrefix>filter_list</mat-icon>
+        <mat-select placeholder="Filter By" [(value)]="filterBy" (selectionChange)="filterBy==='category'?'':searchBy=''">
+          <mat-option value="author">Author</mat-option>
+          <mat-option value="category">Category</mat-option>
+          <mat-option value="title">Title</mat-option>
+          <mat-option value="isbn">ISBN</mat-option>
+        </mat-select>
+      </mat-form-field>
+    </span>
+    <span fxFlex="30">
+      <mat-form-field *ngIf="filterBy==='category'">
+        <mat-icon matPrefix>filter_list</mat-icon>
+        <mat-select placeholder="Filter By" [(value)]="searchBy">
+          <mat-option *ngFor="let cat of categories" [value]="cat.name">
+            {{cat.name}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </span>
+
+  </mat-card>
+
+  <div fxFlex="80" fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="32px" fxLayoutAlign="flex-start">
+
+    <ng-container *ngFor="let book of books|search:{val:searchBy,key:filterBy}">
+
+      <mat-card fxFlex="0 1 calc(20% - 32px)" fxFlex.lt-md="0 1 calc(50% - 32px)" fxFlex.lt-sm="100%">
+        <span fxLayout="column" fxLayoutAlign="center center">
+          <span fxFlex="60">
+            <img [src]="book.image" style="height: 150px;">
+          </span>
+          <span fxFlex="20">
+            <b>Author: </b>
+            <label>{{book.author}}</label>
+          </span>
+          <span fxLayout="row" fxFlex="20">
+            <span>
+              <button type="button" mat-flat-button color="primary" (click)="viewBookDetails(book)">
+                View Details
+              </button>
+            </span>
+            <span>
+              <button mat-icon-button (click)="assignedBookId && assignedBookId.indexOf(book._id.toString())!==-1?unAssignBook(book):assignBook(book)">
+                <mat-icon [color]="assignedBookId && assignedBookId.indexOf(book._id.toString())!==-1?'':'accent'">
+                  favorite
+                </mat-icon>
+              </button>
+            </span>
+          </span>
+        </span>
+      </mat-card>
+
+    </ng-container>
+
+  </div>
+
+</div>
+
+
+
+
+<ng-template #viewDetails>
+  <h1 mat-dialog-title>{{bookDetail.title}}</h1>
+  <span mat-dialog-content style="overflow: auto;" fxLayout="row" fxLayoutAlign="space-evenly stretch" *ngIf="bookDetail"
+    fxLayoutGap="5px">
+    <span fxFlex="20" fxLayout="column">
+      <img [src]="bookDetail.image" fxFlex="70">
+      <span fxFlex="15"><b>
+          Author: </b> {{bookDetail.author}}
+      </span>
+
+      <span fxFlex="15"><b>Rating: </b> {{bookDetail.rating}}
+        <bar-rating [(rate)]="bookDetail.rating" [max]="5" [theme]="'stars'" *ngIf="bookDetail" disabled>
+        </bar-rating>
+      </span>
+    </span>
+    <span fxFlex="80" fxLayout="column" fxFill fxLayoutGap="10px">
+      <span fxFlex="30">
+        {{bookDetail.desciption}}
+      </span>
+      <span fxFlex="70">
+        <span fxFlexLayout="column" *ngFor="let review of bookReviews">
+          <span fxFlexLayout="row">
+            <span fxFlex="20" fxLayoutAlign="end">
+              <mat-icon>face</mat-icon>
+            </span>
+            <span fxFlex="20" fxLayoutAlign="start">
+              <b> {{review.userId}}</b>
+            </span>
+            <span fxFlex="60">
+              {{review.comments}}
+            </span>
+          </span>
+
+        </span>
+      </span>
+
+    </span>
+  </span>
+</ng-template>
+<ng-template #feedBack>
+  <span fxLayout="column" fxLayoutAlign="space-around stretch">
+    <span>
+      <mat-form-field>
+        <textarea matInput placeholder="Enter comments" [(ngModel)]="comments">
+        </textarea>
+      </mat-form-field>
+      <bar-rating [(rate)]="rate" [max]="5" [theme]="'stars'"></bar-rating>
+    </span>
+    <span>
+      <button mat-raised-button color="primary" (click)="submitFeedBack()">Submit</button>
+    </span>
+  </span>
+</ng-template>

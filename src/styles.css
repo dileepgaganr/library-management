@@ -1,0 +1,38 @@
+/* Add application styles & imports to this file! */
+
+@import "~@angular/material/prebuilt-themes/indigo-pink.css";
+@import '~ngx-bar-rating/themes/br-stars-theme';
+html, body {
+  margin: 0;
+  padding: 0;
+  font-size: 16px;
+  height: 100%;
+  position: relative;
+  overflow: auto;
+}
+
+.content {
+  flex: 1;
+  overflow: auto;
+  background-image: url("src/assets/images/library-image.jpg"); 
+}
+
+.fixed-container{
+  width: 100%;
+}
+
+.wrapper {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+mat-sidenav-container {
+  position: fixed;
+  height: 100%;
+  min-height: 0%;
+  width: 100%;
+  min-width: 100%;
+}
+a {
+  color: white !important;
+}

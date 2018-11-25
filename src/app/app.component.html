@@ -1,0 +1,33 @@
+<div class="wrapper">
+
+	<app-header fxShow="true" fxHide.lt-md="true"></app-header>
+	<div fxShow="true" fxHide.gt-sm="true" style="background: #3f51b5;">
+		<button mat-icon-button (click)="sidenav.toggle()" [disabled]="!userDet">
+			<mat-icon>menu</mat-icon>
+		</button>
+	</div>
+	<mat-sidenav-container>
+
+		<mat-sidenav #sidenav fxLayout="column" style="background: #3f51b5;" >
+
+			<div fxLayout="column" *ngIf="userDet">
+				<mat-nav-list fxLayout="column">
+					<a mat-list-item [routerLinkActive]="['active']" [routerLink]="['./Dashboard/Books']">Books</a>
+					<a mat-list-item  *ngIf="userDet.isAdmin" [routerLinkActive]="['active']" [routerLink]="['./Dashboard/AddBooks']">Add Books</a>
+					<a mat-list-item *ngIf="userDet.isAdmin" [routerLinkActive]="['active']" [routerLink]="['./Dashboard/AddUser']">Add User</a>
+					<a mat-list-item [routerLinkActive]="['active']" [routerLink]="['./Dashboard/AssignedBooks']">View Assigned Books</a>
+					<a mat-list-item [routerLinkActive]="['active']" [routerLink]="['./Login']">LogOut</a>
+				</mat-nav-list>
+			</div>
+
+		</mat-sidenav>
+
+		<mat-sidenav-content fxFlexFill class="content">
+			<router-outlet><mat-progress-bar *ngIf="start" mode="indeterminate"  value="40"></mat-progress-bar></router-outlet>
+		</mat-sidenav-content>
+
+	</mat-sidenav-container>
+	<footer fxFlexLayout="row" style="background-color:white;">
+		<span>Your's Library</span>
+	</footer>
+</div>
